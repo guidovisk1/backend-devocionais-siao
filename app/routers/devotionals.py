@@ -65,6 +65,21 @@ def list_devotionals_admin(
     return {"items": items, "total": total, "page": page, "pages": pages}
 
 
+@router.get("/admin/{devotional_id}", response_model=schemas.DevotionalOut)
+def get_devotional_admin(
+    devotional_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(auth.get_current_user),
+):
+    query = db.query(models.Devotional).filter(models.Devotional.id == devotional_id)
+    if current_user.role != models.UserRole.admin:
+        query = query.filter(models.Devotional.author_id == current_user.id)
+    devotional = query.first()
+    if not devotional:
+        raise HTTPException(status_code=404, detail="Devocional não encontrado")
+    return devotional
+
+
 @router.get("/{devotional_id}", response_model=schemas.DevotionalOut)
 def get_devotional(devotional_id: int, db: Session = Depends(get_db)):
     devotional = db.query(models.Devotional).filter(
