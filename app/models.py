@@ -21,7 +21,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    devotionals = relationship("Devotional", back_populates="author")
+    devotionals = relationship("Devotional", back_populates="author", cascade="all, delete-orphan")
 
 
 class Category(Base):

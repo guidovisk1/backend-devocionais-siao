@@ -8,9 +8,16 @@ from . import auth as auth_service
 
 app = FastAPI(title="Devocional SIÃO API", version="1.0.0")
 
+ALLOWED_ORIGINS = [
+    "https://devocionais-siao.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:4173",
+    "http://localhost:3000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
